@@ -1,0 +1,21 @@
+from flask_restful import reqparse
+
+connection_args = reqparse.RequestParser()
+connection_args.add_argument("host",type=str,required=True, help="host broker is required")
+connection_args.add_argument("port",type=int,required=True,help="Port number is required")
+connection_args.add_argument("username",type=str,required=True, help="Username is required")
+connection_args.add_argument("password",type=str,required=True, help="Password is required")
+connection_args.add_argument("topic",type=str,help="you can specify the default topic")
+connection_args.add_argument("topicLevel",type=str, help="you can specify the default topic level")
+
+test_broker_args = reqparse.RequestParser()
+test_broker_args.add_argument("host",type=str,required=True, help="host broker is required")
+test_broker_args.add_argument("port",type=int,required=True,help="Port number is required")
+test_broker_args.add_argument("username",type=str,required=True, help="Username is required")
+test_broker_args.add_argument("password",type=str,required=True, help="Password is required")
+test_broker_args.add_argument("topic",type=str,required=True,help="you can specify the default topic")
+test_broker_args.add_argument("topicLevel",type=str,required=True, help="you can specify the default topic level")
+test_broker_args.add_argument("publishers", type=int, required=True, help="Number of publishers is required")
+test_broker_args.add_argument("subscribers", type=int, required=True, help="Number of subscribers is required")
+test_broker_args.add_argument("message_size", type=int, required=True, help="Number of messageSize is required")
+test_broker_args.add_argument("message_interval", type=int, required=True, help="message interval is required")
