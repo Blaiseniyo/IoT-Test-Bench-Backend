@@ -11,7 +11,8 @@ class Test_Connection(Resource):
             res["client"].disconnect()
             return {"message":"connected successfuly"}, 200
         else:
-            abort(401)
+            # abort(401)
+            return {"message":"can not connect to the broker"}, 401
 
 class Test_Broker(Resource):
     def post(self):
