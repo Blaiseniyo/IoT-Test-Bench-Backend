@@ -31,14 +31,14 @@ class Test_Publisher(Resource):
             print(result[0])
             return {'message': "publisher connection succeeded"}, 200
         except:
-            return {'message': "An error occured"}, 401
+            return {'message': "Publisher connection failed"}, 401
 
 
 class Test_Subscriber(Resource):
     def post(self):
         try:
             body = connection_args.parse_args()
-            topic = 'test/test1'
+            topic = "test/test1"
             client = mqtt.Client("P1")
             client.connect(body['host'], body['port'])
             result = client.subscribe(topic)
@@ -46,7 +46,7 @@ class Test_Subscriber(Resource):
             print(result[0])
             return {'message': "Subscriber connection succeeded"}, 200
         except:
-            return {'message': "An error occured"}, 401
+            return {'message': "Subscriber connection failed"}, 401
         
 
 
