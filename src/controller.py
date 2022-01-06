@@ -21,7 +21,11 @@ class Test_Publisher(Resource):
     def post(self):
         try:
             body = connection_args.parse_args()
-            topic = 'test/test1'
+            if not body['topic']:
+                return {'message': "Please set a topic"}, 401
+            if not body['topicLevel']:
+                return {'message': "Please set a topic Level"}, 401
+            topic = body['topic'] + '/' + body['topicLevel']
             msg = 'this is a test message'
             client = mqtt.Client("P1")
             client.connect(body['host'], body['port'])
@@ -37,7 +41,11 @@ class Test_Subscriber(Resource):
     def post(self):
         try:
             body = connection_args.parse_args()
-            topic = "test/test1"
+            if not body['topic']:
+                return {'message': "Please set a topic"}, 401
+            if not body['topicLevel']:
+                return {'message': "Please set a topic Level"}, 401
+            topic = body['topic'] + '/' + body['topicLevel']
             client = mqtt.Client("P1")
             client.connect(body['host'], body['port'])
             result = client.subscribe(topic)
