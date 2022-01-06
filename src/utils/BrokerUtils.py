@@ -5,7 +5,6 @@ import psutil
 from random import choice
 from string import ascii_uppercase
 
-
 def radom_message(size):
     message = ''.join(choice(ascii_uppercase) for i in range(size))
     return message
@@ -18,6 +17,7 @@ class Broker:
                "messages_per_second": 0, "totalTime": 0, "sentSize": 0, "recievedSize": 0, "CPU_used": 0, "RAM_used": 0, "received_per_second": 0}
 
     def connect_mqtt(self, broker, port, username, password, num):
+
         def on_connect(client, userdata, flags, rc):
             if rc == 0:
                 return True
@@ -31,6 +31,7 @@ class Broker:
             self.messages_received += 1
             self.results["recievedMessages"] += 1
 
+
         client_id = f'client-{num}-{random.randint(0, 1000)}'
         client = mqtt_client.Client(client_id)
         client.username_pw_set(username, password)
@@ -43,11 +44,13 @@ class Broker:
         except:
             print("connection failed")
 
+
     def publish(self, client, topic, size):
         msg = radom_message(size)
         result = client.publish(topic, msg)
         status = result[0]
         if status == 0:
+
             self.results["sentMessages"] += 1
         else:
             self.results["failedMessage"] += 1
@@ -57,6 +60,7 @@ class Broker:
             global connected
             if rc == 0:
                 connected = True
+
             else:
                 connected = False
 
@@ -69,6 +73,7 @@ class Broker:
             connection_flag = True
             client.loop_start()
             time.sleep(1)
+
             return {"client": client, "connected": connected}
         except:
             return {"client": client, "connected": False}
@@ -79,10 +84,12 @@ class Broker:
         self.results = {"sentMessages": 0, "recievedMessages": 0, "sentMessages_percentage": 0, "failedMessage": 0, "messages_per_second": 0,
                         "totalTime": 0, "sentSize": 0, "recievedSize": 0, "CPU_used": 0, "RAM_percent_used": 0, "RAM_size_used": 0}
 
+
         self.messages_received = 0
         clients = []
         subscribs = []
         msg_count = 0
+
         connected = self.check_connection(
             body["host"], body["port"], body["username"], body["password"])["connected"]
 
@@ -103,6 +110,7 @@ class Broker:
                 client.loop_start()
                 self.publish(
                     self, client, body["topic"]+"/"+body["topicLevel"], body["message_size"])
+
                 msg_count += 1
                 time.sleep(body["message_interval"])
                 clients.append(client)
@@ -126,16 +134,21 @@ class Broker:
                 psutil.virtual_memory()[3]/1048576)
             # disconnectiing all publishers
             self.run_flag = False
+
             for client in clients:
                 client.loop_stop()
                 client.disconnect()
             time.sleep(2)
 
+
             # disconnectiing all subscribes
+
             for sub in subscribs:
                 sub.loop_stop()
                 sub.disconnect()
 
+
             return {"connection_status": connected, "message": "connected successfuly", "data": self.results}
         else:
             return {"message": "can not connect to the broker", "connection_status": connected}
+

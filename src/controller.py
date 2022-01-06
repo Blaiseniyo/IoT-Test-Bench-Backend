@@ -4,7 +4,6 @@ from src.services import MqttService
 import paho.mqtt.client as mqtt
 from src.utils.validations import connection_args, test_broker_args
 
-
 class Test_Connection(Resource):
     def post(self):
         body = connection_args.parse_args()
@@ -49,7 +48,6 @@ class Test_Subscriber(Resource):
             return {'message': "Subscriber connection failed"}, 401
         
 
-
 class Test_Broker(Resource):
     def post(self):
         body = test_broker_args.parse_args()
@@ -57,7 +55,6 @@ class Test_Broker(Resource):
         if result["connection_status"]:
             return result, 200
         return result, 401
-
 
 api.add_resource(Test_Connection, "/connect")
 api.add_resource(Test_Publisher, "/publisher/connect")
